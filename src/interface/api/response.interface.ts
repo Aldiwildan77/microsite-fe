@@ -1,3 +1,3 @@
-export interface ApiResponse {
+export interface IApiResponse {
   message: string;
 }

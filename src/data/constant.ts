@@ -1,19 +1,19 @@
 import ISelectOption from "../interface/select.interface";
 
 export enum Transportation {
-  CAR = "mobil",
-  PLANE = "pesawat",
+  CAR = "car",
+  PLANE = "plane",
   BUS = "bus",
-  TRAIN = "kereta",
-  OTHER = "lainnya",
+  TRAIN = "train",
+  OTHER = "other",
 }
 
 export const Constant = {
   transportationOptions: [
-    { label: "Mobil", value: "mobil" },
-    { label: "Kereta", value: "kereta" },
-    { label: "Pesawat", value: "pesawat" },
-    { label: "Bus", value: "bus" },
-    { label: "Lainnya", value: "lainnya" },
+    { label: "Mobil", value: Transportation.CAR },
+    { label: "Kereta", value: Transportation.TRAIN },
+    { label: "Pesawat", value: Transportation.PLANE },
+    { label: "Bus", value: Transportation.BUS },
+    { label: "Lainnya", value: Transportation.OTHER },
   ] as ISelectOption[],
 };

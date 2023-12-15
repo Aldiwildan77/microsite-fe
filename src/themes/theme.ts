@@ -5,7 +5,10 @@ const theme = extendTheme({
   colors: {
     bodyBackgroundColor: "#E8E8E8",
     bodyBackgroundSecondaryColor: "#6B7378",
-    primaryColor : "#F15078"
+    primaryColor: "#000000",
+    secondaryColor: "#6B1822",
+    thirdColor: "#5C2B22",
+    forthColor: "#D4B15F",
   },
   styles: {
     global: {

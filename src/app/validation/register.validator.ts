@@ -1,24 +1,23 @@
 import { FormikConfig, FormikHelpers } from "formik";
 import * as Yup from "yup";
-import ISelectOption from "../../interface/select.interface";
+import { Transportation } from "../../data/constant";
 
 interface IRegisterInitialValue {
   fullName: string;
   email: string;
   phoneNumber: string;
   address: string;
-  district: string;
-  city: string;
-  province: string;
   postalCode: string;
-  departureTrasportationType: ISelectOption | undefined;
+  departureTrasportationType: string;
   departureTime: string;
-  homecomingTrasportationType: ISelectOption | undefined;
+  departureFlightNumber: string;
+  departureAirLine: string;
+  departureTrainName: string;
+  homecomingTrasportationType: string;
   homecomingTime: string;
-  departureFlightNumber: string | undefined;
-  departureAirLine: string | undefined;
-  homecomingFlightNumber: string | undefined;
-  homecomingAirLine: string | undefined;
+  homecomingFlightNumber: string;
+  homecomingAirLine: string;
+  homecomingTrainName: string;
 }
 
 const registerValidatorSchema = Yup.object({
@@ -27,29 +26,47 @@ const registerValidatorSchema = Yup.object({
     .required("Email belum terisi")
     .email("Format email tidak valid"),
   phoneNumber: Yup.string().required("Nomer telepon belum terisi"),
-  address: Yup.string().required("Alamat belum terisi"),
-  district: Yup.string().required("Kecamatan belum terisi"),
-  city: Yup.string().required("Kota/Kab belum terisi"),
-  province: Yup.string().required("Provinsi belum terisi"),
   postalCode: Yup.string().required("Kode pos belum terisi"),
-  departureTrasportationType: Yup.object()
-    .shape({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-    })
-    .required("Tipe kendaraan belum dipilih"),
+  address: Yup.string().required("Alamat belum terisi"),
+  departureTrasportationType: Yup.string().required(
+    "Jenis kendaraan belum terpilih"
+  ),
   departureTime: Yup.string().required("Waktu keberangkatan belum dipilih"),
-  departureAirlineType: Yup.string(),
-  departureFlightNumber: Yup.string(),
-  homecomingTrasportationType: Yup.object()
-    .shape({
-      value: Yup.string().required(),
-      label: Yup.string().required(),
-    })
-    .required("Tipe kendaraan belum dipilih"),
+  departureAirLine: Yup.string().when(["departureTrasportationType"], {
+    is: (value: string) => value === Transportation.PLANE,
+    then: (schema) => schema.required("Nama maskapai pesawat belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
+  departureFlightNumber: Yup.string().when(["departureTrasportationType"], {
+    is: (value: string) => value === Transportation.PLANE,
+    then: (schema) => schema.required("Flight number belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
+  departureTrainName: Yup.string().when(["departureTrasportationType"], {
+    is: (value: string) => value === Transportation.TRAIN,
+    then: (schema) => schema.required("Nama kereta belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
+
+  homecomingTrasportationType: Yup.string().required(
+    "Jenis kendaraan belum terpilih"
+  ),
   homecomingTime: Yup.string().required("Waktu kepulangan belum dipilih"),
-  homecomingAirLine: Yup.string(),
-  homecomingFlightNumber: Yup.string(),
+  homecomingAirLine: Yup.string().when(["homecomingTrasportationType"], {
+    is: (value: string) => value === Transportation.PLANE,
+    then: (schema) => schema.required("Nama maskapai belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
+  homecomingFlightNumber: Yup.string().when(["homecomingTrasportationType"], {
+    is: (value: string) => value === Transportation.PLANE,
+    then: (schema) => schema.required("Flight number belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
+  homecomingTrainName: Yup.string().when(["homecomingTrasportationType"], {
+    is: (value: string) => value === Transportation.TRAIN,
+    then: (schema) => schema.required("Nama kereta belum terisi"),
+    otherwise: (schema) => schema.optional(),
+  }),
 });
 
 const registerInitialValues = (): IRegisterInitialValue => {
@@ -58,18 +75,17 @@ const registerInitialValues = (): IRegisterInitialValue => {
     email: "",
     address: "",
     phoneNumber: "",
-    city: "",
-    district: "",
-    province: "",
     postalCode: "",
-    departureTrasportationType: undefined,
+    departureTrasportationType: "",
     departureAirLine: "",
     departureFlightNumber: "",
     departureTime: "",
-    homecomingTrasportationType: undefined,
+    homecomingTrasportationType: "",
     homecomingAirLine: "",
     homecomingFlightNumber: "",
     homecomingTime: "",
+    homecomingTrainName: "",
+    departureTrainName: "",
   };
 };
 
