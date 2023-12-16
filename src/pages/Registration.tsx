@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Card,
@@ -8,6 +10,7 @@ import {
   Heading,
   Input,
   Select,
+  Text,
   VStack,
   useToast,
 } from '@chakra-ui/react';
@@ -17,14 +20,8 @@ import { register } from '../api/register';
 import createFormikRegisterConfig from '../app/validation/register.validator';
 import { Constant, Transportation } from '../data/constant';
 import { IResponse } from '../interface/api/registerInput.interface';
-import { ISelectOption } from '../interface/select.interface';
-import { SelectStyle, SelectTheme } from '../themes/Select/Select';
 
 function Registration() {
-  const [homecomingTransportation, sethomecomingTransportation] =
-    useState<ISelectOption>();
-  const [departureTransportation, setDepartureTransportation] =
-    useState<ISelectOption>();
   const [response, setResponse] = useState<IResponse | null>(null);
   const [apiState, setApiState] = useState<
     'idle' | 'pending' | 'done' | 'rejected'
@@ -60,16 +57,18 @@ function Registration() {
     })
   );
   useEffect(() => {
-    if (!response) return;
+    if (!response) {
+      return;
+    }
     toast({
       title: 'Registration',
       status: response.statusCode === 201 ? 'success' : 'error',
       description:
         response.statusCode === 201
-          ? 'Registration Success'
+          ? 'Registration Success, please check your email for your QR Code'
           : `Registration Failed : ${response.message}`,
-      duration: 3000,
       isClosable: true,
+      duration: 10 * 1000,
       position: 'top-right',
     });
     setApiState('idle');
@@ -246,7 +245,13 @@ function Registration() {
   };
 
   return (
-    <Box display={'flex'} w={'full'} justifyContent={'center'} py={'1rem'}>
+    <Box
+      display={'flex'}
+      w={'full'}
+      justifyContent={'center'}
+      py={'1rem'}
+      backgroundColor={'primaryColor'}
+    >
       <Card
         minW={'320px'}
         w={'60%'}
@@ -255,9 +260,18 @@ function Registration() {
         borderRadius={'10px'}
       >
         <VStack>
-          <Heading mb={'1rem'}>Registrasi</Heading>
+          <Heading mb={'1rem'} textColor={'secondaryColor'}>
+            Registrasi
+          </Heading>
+          <Alert status='warning'>
+            <AlertIcon />
+            <Text fontSize={'16px'} textAlign={'center'}>
+              Setelah berhasil registrasi mohon untuk cek email dan menyimpan
+              kode QR pendaftaran anda untuk Check In pada Venue
+            </Text>
+          </Alert>
           <form style={{ width: '100%' }} onSubmit={formik.handleSubmit}>
-            <VStack spacing={'1rem'}>
+            <VStack spacing={'1rem'} marginTop={'4'}>
               <Heading size={'md'} as={'h2'} w={'full'}>
                 Data Diri
               </Heading>
@@ -272,6 +286,7 @@ function Registration() {
                   variant={'primary'}
                   onChange={(e) => handleChange('fullName', e.target.value)}
                   value={formik.values.fullName}
+                  placeholder='Nama Lengkap'
                 />
                 {Boolean(formik.errors.fullName) && formik.submitCount > 0 ? (
                   <FormErrorMessage>{formik.errors.fullName}</FormErrorMessage>
@@ -289,6 +304,7 @@ function Registration() {
                   type='email'
                   onChange={(e) => handleChange('email', e.target.value)}
                   value={formik.values.email}
+                  placeholder='Email'
                 />
                 {Boolean(formik.errors.email) && formik.submitCount > 0 ? (
                   <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
@@ -308,11 +324,14 @@ function Registration() {
                   onChange={(e) => {
                     const sanitized = e.target.value;
                     const isValid = /^\d+$/.test(sanitized) || sanitized === '';
-                    if (!isValid) return;
+                    if (!isValid) {
+                      return;
+                    }
                     handleChange('phoneNumber', e.target.value);
                   }}
                   pattern='\d*'
                   value={formik.values.phoneNumber}
+                  placeholder='Nomer Telepon'
                 />
                 {Boolean(formik.errors.phoneNumber) &&
                 formik.submitCount > 0 ? (
@@ -335,6 +354,7 @@ function Registration() {
                     handleChange('address', e.target.value);
                   }}
                   value={formik.values.address}
+                  placeholder='Alamat Lengkap (Jalan / Kelurahan / Kecamatan / Kota / Provinsi)'
                 />
                 {Boolean(formik.errors.address) && formik.submitCount > 0 ? (
                   <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
@@ -354,11 +374,14 @@ function Registration() {
                   onChange={(e) => {
                     const sanitized = e.target.value;
                     const isValid = /^\d+$/.test(sanitized) || sanitized === '';
-                    if (!isValid) return;
+                    if (!isValid) {
+                      return;
+                    }
                     handleChange('postalCode', e.target.value);
                   }}
                   pattern='\d*'
                   value={formik.values.postalCode}
+                  placeholder='Kode Pos'
                 />
                 {Boolean(formik.errors.postalCode) && formik.submitCount > 0 ? (
                   <FormErrorMessage>
@@ -380,15 +403,22 @@ function Registration() {
                   Jenis Kendaraan
                 </FormLabel>
                 <Select
-                  styles={SelectStyle}
-                  theme={SelectTheme}
-                  options={Constant.transportationOptions}
-                  onChange={(selected) => {
-                    handleChange('departureTrasportationType', selected?.value);
-                    setDepartureTransportation(selected!);
+                  borderRadius={'8px'}
+                  borderColor={'black'}
+                  placeholder='Pilih Jenis Kendaraan'
+                  onChange={(e) => {
+                    handleChange('departureTrasportationType', e.target.value);
                   }}
-                  value={departureTransportation}
-                />
+                >
+                  {Constant.transportationOptions.map((option) => (
+                    <option
+                      value={option.value}
+                      key={'departure-' + option.label}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
                 {Boolean(formik.errors.departureTrasportationType) &&
                 formik.submitCount > 0 ? (
                   <FormErrorMessage>
@@ -439,18 +469,22 @@ function Registration() {
                   Jenis Kendaraan
                 </FormLabel>
                 <Select
-                  styles={SelectStyle}
-                  theme={SelectTheme}
-                  options={Constant.transportationOptions}
-                  onChange={(selected) => {
-                    handleChange(
-                      'homecomingTrasportationType',
-                      selected?.value
-                    );
-                    sethomecomingTransportation(selected!);
+                  borderRadius={'8px'}
+                  borderColor={'black'}
+                  placeholder='Pilih Jenis Kendaraan'
+                  onChange={(e) => {
+                    handleChange('homecomingTrasportationType', e.target.value);
                   }}
-                  value={homecomingTransportation}
-                />
+                >
+                  {Constant.transportationOptions.map((option) => (
+                    <option
+                      value={option.value}
+                      key={'homecoming-' + option.label}
+                    >
+                      {option.label}
+                    </option>
+                  ))}
+                </Select>
                 {Boolean(formik.errors.homecomingTrasportationType) &&
                 formik.submitCount > 0 ? (
                   <FormErrorMessage>
@@ -493,9 +527,10 @@ function Registration() {
                 mt={'2rem'}
                 w={'full'}
                 borderRadius={'10px'}
-                bg={'primaryColor'}
+                bg={'secondaryColor'}
                 color={'white'}
                 isLoading={apiState === 'pending'}
+                _hover={{ backgroundColor: 'rgba(107,24,34, 0.5)' }}
               >
                 Daftar
               </Button>
