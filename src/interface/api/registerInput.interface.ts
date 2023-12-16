@@ -16,7 +16,13 @@ export interface IRegisterAttributes {
   return_train_name: string;
 }
 
+export type RegisterResponse = {
+  email: string;
+  qr_link: string;
+};
+
 export interface IResponse {
   statusCode: number;
   message: string;
+  data?: RegisterResponse;
 }

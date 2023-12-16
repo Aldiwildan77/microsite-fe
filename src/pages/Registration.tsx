@@ -16,12 +16,14 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { register } from '../api/register';
 import createFormikRegisterConfig from '../app/validation/register.validator';
 import { Constant, Transportation } from '../data/constant';
 import { IResponse } from '../interface/api/registerInput.interface';
 
 function Registration() {
+  const navigate = useNavigate();
   const [response, setResponse] = useState<IResponse | null>(null);
   const [apiState, setApiState] = useState<
     'idle' | 'pending' | 'done' | 'rejected'
@@ -60,19 +62,23 @@ function Registration() {
     if (!response) {
       return;
     }
-    toast({
-      title: 'Registration',
-      status: response.statusCode === 201 ? 'success' : 'error',
-      description:
-        response.statusCode === 201
-          ? 'Registration Success, please check your email for your QR Code'
-          : `Registration Failed : ${response.message}`,
-      isClosable: true,
-      duration: 10 * 1000,
-      position: 'top-right',
-    });
     setApiState('idle');
     setResponse(null);
+
+    if (response.statusCode !== 201) {
+      toast({
+        title: 'Registration',
+        status: 'error',
+        description: `Registration Failed: ${response.message}`,
+        isClosable: true,
+        duration: 10 * 1000,
+        position: 'top-right',
+      });
+      return;
+    }
+
+    navigate('/registration/success', { replace: true, state: response?.data });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, toast]);
   const handleChange = (field: string, val: unknown) => {
     formik.setFieldValue(field, val);

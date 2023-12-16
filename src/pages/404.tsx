@@ -2,7 +2,13 @@ import { Center, Flex, Heading, Text } from '@chakra-ui/react';
 
 export default function ErrorPage() {
   return (
-    <Center bg={'secondaryColor'} h='100vh' color='white' textColor={'white'}>
+    <Center
+      bg={'secondaryColor'}
+      h='100vh'
+      color='white'
+      textColor={'white'}
+      px='4'
+    >
       <Flex
         flex='1'
         justifyContent={'center'}

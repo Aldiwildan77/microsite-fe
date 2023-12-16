@@ -6,6 +6,7 @@ import theme from './themes/theme.ts';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Registration from './pages/Registration.tsx';
+import RegistrationSuccess from './pages/RegistrationSuccess.tsx';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +17,10 @@ const router = createBrowserRouter([
   {
     path: '/registration',
     element: <Registration />,
+  },
+  {
+    path: '/registration/success',
+    element: <RegistrationSuccess />,
   },
 ]);
 
