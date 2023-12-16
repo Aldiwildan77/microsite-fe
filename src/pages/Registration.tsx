@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../api/register';
 import createFormikRegisterConfig from '../app/validation/register.validator';
+import HelpDesk from '../components/HelpDesk/HelpDesk';
 import { Constant, Transportation } from '../data/constant';
 import { IResponse } from '../interface/api/registerInput.interface';
 
@@ -249,300 +250,315 @@ function Registration() {
   };
 
   return (
-    <Box
-      display={'flex'}
-      w={'full'}
-      justifyContent={'center'}
-      py={'1rem'}
-      backgroundColor={'primaryColor'}
-    >
-      <Card
-        minW={'320px'}
-        w={'60%'}
-        py={{ md: '4rem', base: '8px' }}
-        px={{ md: '4rem', base: '8px' }}
-        borderRadius={'10px'}
+    <>
+      <Box
+        display={'flex'}
+        w={'full'}
+        justifyContent={'center'}
+        py={'1rem'}
+        backgroundColor={'primaryColor'}
       >
-        <VStack>
-          <Heading mb={'1rem'} textColor={'secondaryColor'}>
-            Registrasi
-          </Heading>
-          <Alert status='warning'>
-            <AlertIcon />
-            <Text fontSize={'16px'} textAlign={'center'}>
-              Setelah berhasil registrasi mohon untuk cek email dan menyimpan
-              kode QR pendaftaran anda untuk Check In pada Venue
-            </Text>
-          </Alert>
-          <form style={{ width: '100%' }} onSubmit={formik.handleSubmit}>
-            <VStack spacing={'1rem'} marginTop={'4'}>
-              <Heading size={'md'} as={'h2'} w={'full'}>
-                Data Diri
-              </Heading>
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.fullName) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='fullName'>Nama Lengkap</FormLabel>
-                <Input
-                  id='fullName'
-                  variant={'primary'}
-                  onChange={(e) => handleChange('fullName', e.target.value)}
-                  value={formik.values.fullName}
-                  placeholder='Nama Lengkap'
-                />
-                {Boolean(formik.errors.fullName) && formik.submitCount > 0 ? (
-                  <FormErrorMessage>{formik.errors.fullName}</FormErrorMessage>
-                ) : null}
-              </FormControl>
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.email) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='email'>Email</FormLabel>
-                <Input
-                  id='email'
-                  variant={'primary'}
-                  type='email'
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  value={formik.values.email}
-                  placeholder='Email'
-                />
-                {Boolean(formik.errors.email) && formik.submitCount > 0 ? (
-                  <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.phoneNumber) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='phoneNumber'>Nomer Telepon</FormLabel>
-                <Input
-                  id='phoneNumber'
-                  variant={'primary'}
-                  type='number'
-                  onChange={(e) => {
-                    const sanitized = e.target.value;
-                    const isValid = /^\d+$/.test(sanitized) || sanitized === '';
-                    if (!isValid) {
-                      return;
-                    }
-                    handleChange('phoneNumber', e.target.value);
-                  }}
-                  pattern='\d*'
-                  value={formik.values.phoneNumber}
-                  placeholder='Nomer Telepon'
-                />
-                {Boolean(formik.errors.phoneNumber) &&
-                formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.phoneNumber}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.address) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='address'>Alamat</FormLabel>
-                <Input
-                  id='address'
-                  variant={'primary'}
-                  onChange={(e) => {
-                    handleChange('address', e.target.value);
-                  }}
-                  value={formik.values.address}
-                  placeholder='Alamat Lengkap (Jalan / Kelurahan / Kecamatan / Kota / Provinsi)'
-                />
-                {Boolean(formik.errors.address) && formik.submitCount > 0 ? (
-                  <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.postalCode) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='postalCode'>Kode Pos</FormLabel>
-                <Input
-                  id='postalCode'
-                  type='number'
-                  variant={'primary'}
-                  onChange={(e) => {
-                    const sanitized = e.target.value;
-                    const isValid = /^\d+$/.test(sanitized) || sanitized === '';
-                    if (!isValid) {
-                      return;
-                    }
-                    handleChange('postalCode', e.target.value);
-                  }}
-                  pattern='\d*'
-                  value={formik.values.postalCode}
-                  placeholder='Kode Pos'
-                />
-                {Boolean(formik.errors.postalCode) && formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.postalCode}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
-                Detail Keberangkatan
-              </Heading>
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.departureTrasportationType) &&
-                  formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='departureTrasportationType'>
-                  Jenis Kendaraan
-                </FormLabel>
-                <Select
-                  borderRadius={'8px'}
-                  borderColor={'black'}
-                  placeholder='Pilih Jenis Kendaraan'
-                  onChange={(e) => {
-                    handleChange('departureTrasportationType', e.target.value);
-                  }}
-                >
-                  {Constant.transportationOptions.map((option) => (
-                    <option
-                      value={option.value}
-                      key={'departure-' + option.label}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </Select>
-                {Boolean(formik.errors.departureTrasportationType) &&
-                formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.departureTrasportationType}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              {generateTextfield(
-                formik.values.departureTrasportationType,
-                'departure'
-              )}
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.departureTime) && formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='departureTime'>
-                  Waktu Keberangkatan
-                </FormLabel>
-                <Input
-                  id='departureTime'
-                  variant={'primary'}
-                  onChange={(e) =>
-                    handleChange('departureTime', e.target.value)
+        <Card
+          minW={'320px'}
+          w={'60%'}
+          py={{ md: '4rem', base: '8px' }}
+          px={{ md: '4rem', base: '8px' }}
+          borderRadius={'10px'}
+        >
+          <VStack>
+            <Heading mb={'1rem'} textColor={'secondaryColor'}>
+              Registrasi
+            </Heading>
+            <Alert status='warning'>
+              <AlertIcon />
+              <Text fontSize={'16px'} textAlign={'center'}>
+                Setelah berhasil registrasi mohon untuk cek email dan menyimpan
+                kode QR pendaftaran anda untuk Check In pada Venue
+              </Text>
+            </Alert>
+            <form style={{ width: '100%' }} onSubmit={formik.handleSubmit}>
+              <VStack spacing={'1rem'} marginTop={'4'}>
+                <Heading size={'md'} as={'h2'} w={'full'}>
+                  Data Diri
+                </Heading>
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.fullName) && formik.submitCount > 0
                   }
-                  value={formik.values.departureTime}
-                  type='datetime-local'
-                />
-                {Boolean(formik.errors.departureTime) &&
-                formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.departureTime}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
-                Detail Kepulangan
-              </Heading>
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.homecomingTrasportationType) &&
-                  formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='homecomingTrasportationType'>
-                  Jenis Kendaraan
-                </FormLabel>
-                <Select
-                  borderRadius={'8px'}
-                  borderColor={'black'}
-                  placeholder='Pilih Jenis Kendaraan'
-                  onChange={(e) => {
-                    handleChange('homecomingTrasportationType', e.target.value);
-                  }}
                 >
-                  {Constant.transportationOptions.map((option) => (
-                    <option
-                      value={option.value}
-                      key={'homecoming-' + option.label}
-                    >
-                      {option.label}
-                    </option>
-                  ))}
-                </Select>
-                {Boolean(formik.errors.homecomingTrasportationType) &&
-                formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.homecomingTrasportationType}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-
-              {generateTextfield(
-                formik.values.homecomingTrasportationType,
-                'homecoming'
-              )}
-              <FormControl
-                isInvalid={
-                  Boolean(formik.errors.homecomingTime) &&
-                  formik.submitCount > 0
-                }
-              >
-                <FormLabel htmlFor='homecomingTime'>
-                  Waktu Keberangkatan
-                </FormLabel>
-                <Input
-                  id='homecomingTime'
-                  variant={'primary'}
-                  onChange={(e) =>
-                    handleChange('homecomingTime', e.target.value)
+                  <FormLabel htmlFor='fullName'>Nama Lengkap</FormLabel>
+                  <Input
+                    id='fullName'
+                    variant={'primary'}
+                    onChange={(e) => handleChange('fullName', e.target.value)}
+                    value={formik.values.fullName}
+                    placeholder='Nama Lengkap'
+                  />
+                  {Boolean(formik.errors.fullName) && formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.fullName}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.email) && formik.submitCount > 0
                   }
-                  value={formik.values.homecomingTime}
-                  type='datetime-local'
-                />
-                {Boolean(formik.errors.homecomingTime) &&
-                formik.submitCount > 0 ? (
-                  <FormErrorMessage>
-                    {formik.errors.homecomingTime}
-                  </FormErrorMessage>
-                ) : null}
-              </FormControl>
-              <Button
-                type='submit'
-                mt={'2rem'}
-                w={'full'}
-                borderRadius={'10px'}
-                bg={'secondaryColor'}
-                color={'white'}
-                isLoading={apiState === 'pending'}
-                _hover={{ backgroundColor: 'rgba(107,24,34, 0.5)' }}
-              >
-                Daftar
-              </Button>
-            </VStack>
-          </form>
-        </VStack>
-      </Card>
-    </Box>
+                >
+                  <FormLabel htmlFor='email'>Email</FormLabel>
+                  <Input
+                    id='email'
+                    variant={'primary'}
+                    type='email'
+                    onChange={(e) => handleChange('email', e.target.value)}
+                    value={formik.values.email}
+                    placeholder='Email'
+                  />
+                  {Boolean(formik.errors.email) && formik.submitCount > 0 ? (
+                    <FormErrorMessage>{formik.errors.email}</FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.phoneNumber) && formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='phoneNumber'>Nomer Telepon</FormLabel>
+                  <Input
+                    id='phoneNumber'
+                    variant={'primary'}
+                    type='number'
+                    onChange={(e) => {
+                      const sanitized = e.target.value;
+                      const isValid =
+                        /^\d+$/.test(sanitized) || sanitized === '';
+                      if (!isValid) {
+                        return;
+                      }
+                      handleChange('phoneNumber', e.target.value);
+                    }}
+                    pattern='\d*'
+                    value={formik.values.phoneNumber}
+                    placeholder='Nomer Telepon'
+                  />
+                  {Boolean(formik.errors.phoneNumber) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.phoneNumber}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.address) && formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='address'>Alamat</FormLabel>
+                  <Input
+                    id='address'
+                    variant={'primary'}
+                    onChange={(e) => {
+                      handleChange('address', e.target.value);
+                    }}
+                    value={formik.values.address}
+                    placeholder='Alamat Lengkap (Jalan / Kelurahan / Kecamatan / Kota / Provinsi)'
+                  />
+                  {Boolean(formik.errors.address) && formik.submitCount > 0 ? (
+                    <FormErrorMessage>{formik.errors.address}</FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.postalCode) && formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='postalCode'>Kode Pos</FormLabel>
+                  <Input
+                    id='postalCode'
+                    type='number'
+                    variant={'primary'}
+                    onChange={(e) => {
+                      const sanitized = e.target.value;
+                      const isValid =
+                        /^\d+$/.test(sanitized) || sanitized === '';
+                      if (!isValid) {
+                        return;
+                      }
+                      handleChange('postalCode', e.target.value);
+                    }}
+                    pattern='\d*'
+                    value={formik.values.postalCode}
+                    placeholder='Kode Pos'
+                  />
+                  {Boolean(formik.errors.postalCode) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.postalCode}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
+                  Detail Keberangkatan
+                </Heading>
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.departureTrasportationType) &&
+                    formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='departureTrasportationType'>
+                    Jenis Kendaraan
+                  </FormLabel>
+                  <Select
+                    borderRadius={'8px'}
+                    borderColor={'black'}
+                    placeholder='Pilih Jenis Kendaraan'
+                    onChange={(e) => {
+                      handleChange(
+                        'departureTrasportationType',
+                        e.target.value
+                      );
+                    }}
+                  >
+                    {Constant.transportationOptions.map((option) => (
+                      <option
+                        value={option.value}
+                        key={'departure-' + option.label}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                  {Boolean(formik.errors.departureTrasportationType) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.departureTrasportationType}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                {generateTextfield(
+                  formik.values.departureTrasportationType,
+                  'departure'
+                )}
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.departureTime) &&
+                    formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='departureTime'>
+                    Waktu Keberangkatan
+                  </FormLabel>
+                  <Input
+                    id='departureTime'
+                    variant={'primary'}
+                    onChange={(e) =>
+                      handleChange('departureTime', e.target.value)
+                    }
+                    value={formik.values.departureTime}
+                    type='datetime-local'
+                  />
+                  {Boolean(formik.errors.departureTime) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.departureTime}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
+                  Detail Kepulangan
+                </Heading>
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.homecomingTrasportationType) &&
+                    formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='homecomingTrasportationType'>
+                    Jenis Kendaraan
+                  </FormLabel>
+                  <Select
+                    borderRadius={'8px'}
+                    borderColor={'black'}
+                    placeholder='Pilih Jenis Kendaraan'
+                    onChange={(e) => {
+                      handleChange(
+                        'homecomingTrasportationType',
+                        e.target.value
+                      );
+                    }}
+                  >
+                    {Constant.transportationOptions.map((option) => (
+                      <option
+                        value={option.value}
+                        key={'homecoming-' + option.label}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                  {Boolean(formik.errors.homecomingTrasportationType) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.homecomingTrasportationType}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+
+                {generateTextfield(
+                  formik.values.homecomingTrasportationType,
+                  'homecoming'
+                )}
+                <FormControl
+                  isInvalid={
+                    Boolean(formik.errors.homecomingTime) &&
+                    formik.submitCount > 0
+                  }
+                >
+                  <FormLabel htmlFor='homecomingTime'>
+                    Waktu Keberangkatan
+                  </FormLabel>
+                  <Input
+                    id='homecomingTime'
+                    variant={'primary'}
+                    onChange={(e) =>
+                      handleChange('homecomingTime', e.target.value)
+                    }
+                    value={formik.values.homecomingTime}
+                    type='datetime-local'
+                  />
+                  {Boolean(formik.errors.homecomingTime) &&
+                  formik.submitCount > 0 ? (
+                    <FormErrorMessage>
+                      {formik.errors.homecomingTime}
+                    </FormErrorMessage>
+                  ) : null}
+                </FormControl>
+                <Button
+                  type='submit'
+                  mt={'2rem'}
+                  w={'full'}
+                  borderRadius={'10px'}
+                  bg={'secondaryColor'}
+                  color={'white'}
+                  isLoading={apiState === 'pending'}
+                  _hover={{ backgroundColor: 'rgba(107,24,34, 0.5)' }}
+                >
+                  Daftar
+                </Button>
+              </VStack>
+            </form>
+          </VStack>
+        </Card>
+      </Box>
+      <HelpDesk />
+    </>
   );
 }
 

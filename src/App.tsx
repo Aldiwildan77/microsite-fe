@@ -1,12 +1,5 @@
-import {
-  Box,
-  Button,
-  Flex,
-  IconButton,
-  Image,
-  useMediaQuery,
-} from '@chakra-ui/react';
-import { FaWhatsapp } from 'react-icons/fa';
+import { Button, Flex, Image, useMediaQuery } from '@chakra-ui/react';
+import HelpDesk from './components/HelpDesk/HelpDesk';
 
 function App() {
   const [isLargerThan800] = useMediaQuery('(min-width: 768px)');
@@ -56,24 +49,7 @@ function App() {
           Registrasi
         </Button>
       </Flex>
-      <IconButton
-        as={'a'}
-        href='https://wa.me/' // TODO : add helpdesk number
-        target='_blank'
-        bg={'#128C7E'}
-        borderRadius={'full'}
-        aria-label='help'
-        icon={
-          <Box fontSize={'24px'} color={'white'}>
-            <FaWhatsapp />
-          </Box>
-        }
-        position={'fixed'}
-        right={'1rem'}
-        bottom={'1rem'}
-        zIndex={3}
-        _hover={{ background: '#128C7E' }}
-      />
+      <HelpDesk />
     </>
   );
 }
