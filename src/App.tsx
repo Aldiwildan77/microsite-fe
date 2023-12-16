@@ -72,6 +72,7 @@ function App() {
         right={'1rem'}
         bottom={'1rem'}
         zIndex={3}
+        _hover={{ background: '#128C7E' }}
       />
     </>
   );
