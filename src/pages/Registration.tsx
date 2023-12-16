@@ -269,10 +269,8 @@ function Registration() {
             lg: '10px',
           }}
         >
-          <VStack>
-            <Heading mb={'1rem'} textColor={'secondaryColor'}>
-              Registrasi
-            </Heading>
+          <VStack spacing='4'>
+            <Heading textColor={'secondaryColor'}>Registrasi</Heading>
             <Alert status='warning'>
               <AlertIcon />
               <Text fontSize={'16px'} textAlign={'center'}>
@@ -281,7 +279,7 @@ function Registration() {
               </Text>
             </Alert>
             <form style={{ width: '100%' }} onSubmit={formik.handleSubmit}>
-              <VStack spacing={'1rem'} marginTop={'4'}>
+              <VStack spacing={'2'} pb={{ base: '10', lg: '2' }}>
                 <Heading size={'md'} as={'h2'} w={'full'}>
                   Data Diri
                 </Heading>
@@ -405,7 +403,7 @@ function Registration() {
                   ) : null}
                 </FormControl>
 
-                <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
+                <Heading size={'md'} as={'h2'} w={'full'} mt={'4'}>
                   Detail Keberangkatan
                 </Heading>
                 <FormControl
@@ -475,7 +473,7 @@ function Registration() {
                   ) : null}
                 </FormControl>
 
-                <Heading size={'md'} as={'h2'} w={'full'} mt={'2rem'}>
+                <Heading size={'md'} as={'h2'} w={'full'} mt={'4'}>
                   Detail Kepulangan
                 </Heading>
                 <FormControl
@@ -546,7 +544,6 @@ function Registration() {
                 </FormControl>
                 <Button
                   type='submit'
-                  mt={'2rem'}
                   w={'full'}
                   borderRadius={'10px'}
                   bg={'secondaryColor'}
