@@ -255,15 +255,19 @@ function Registration() {
         display={'flex'}
         w={'full'}
         justifyContent={'center'}
-        py={'1rem'}
+        py={{
+          lg: '1rem',
+        }}
         backgroundColor={'primaryColor'}
       >
         <Card
           minW={'320px'}
-          w={'60%'}
+          w={{ lg: '60%' }}
           py={{ md: '4rem', base: '8px' }}
           px={{ md: '4rem', base: '8px' }}
-          borderRadius={'10px'}
+          borderRadius={{
+            lg: '10px',
+          }}
         >
           <VStack>
             <Heading mb={'1rem'} textColor={'secondaryColor'}>
