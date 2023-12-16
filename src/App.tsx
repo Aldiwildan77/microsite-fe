@@ -1,18 +1,36 @@
-import { Box, Button, Flex, IconButton, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  IconButton,
+  Image,
+  useMediaQuery,
+} from '@chakra-ui/react';
 import { FaWhatsapp } from 'react-icons/fa';
-import banner from './assets/banner_landscape.webp';
 
 function App() {
+  const [isLargerThan800] = useMediaQuery('(min-width: 768px)');
   return (
     <>
-      <Image
-        src={banner}
-        w={'full'}
-        h={'full'}
-        backgroundSize={'cover'}
-        backgroundRepeat={'no-repeat'}
-        position={'fixed'}
-      />
+      {isLargerThan800 ? (
+        <Image
+          src={'/banner_landscape.webp'}
+          w={'full'}
+          h={'full'}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
+          position={'fixed'}
+        />
+      ) : (
+        <Image
+          src={'/banner_portrait.webp'}
+          w={'full'}
+          h={'full'}
+          backgroundSize={'cover'}
+          backgroundRepeat={'no-repeat'}
+          position={'fixed'}
+        />
+      )}
       <Flex
         position={'fixed'}
         w={'full'}
