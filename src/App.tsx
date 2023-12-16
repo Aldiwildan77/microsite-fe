@@ -48,6 +48,10 @@ function App() {
           _hover={{ background: 'secondaryColor' }}
           cursor={'pointer'}
           href='/registration'
+          px={{
+            base: '10',
+            md: '20',
+          }}
         >
           Registrasi
         </Button>
