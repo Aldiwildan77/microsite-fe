@@ -51,10 +51,8 @@ function Registration() {
           return_vehicle_type: value.homecomingTrasportationType,
         });
         setResponse(res);
-        console.log(res);
       } catch (e) {
         setApiState('rejected');
-        console.error(e);
       }
     })
   );

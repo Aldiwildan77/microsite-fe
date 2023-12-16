@@ -16,7 +16,7 @@ export const register = async (input: IRegisterAttributes) => {
     return resObj;
   } catch (e) {
     if (e instanceof AxiosError) {
-      throw new Error(`Error : ${e.message}`);
+      return e.response?.data;
     }
     throw e;
   }
