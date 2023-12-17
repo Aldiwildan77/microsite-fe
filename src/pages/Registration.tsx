@@ -50,6 +50,8 @@ function Registration() {
           return_flight_number: value.homecomingFlightNumber,
           return_train_name: value.homecomingTrainName,
           return_vehicle_type: value.homecomingTrasportationType,
+          depart_vehicle_additional_info: value.departureVehicleAdditionalInfo,
+          return_vehicle_additional_info: value.homecomingVehicleAdditionalInfo,
         });
         setResponse(res);
       } catch (e) {
@@ -164,6 +166,36 @@ function Registration() {
               ) : null}
             </FormControl>
           );
+        } else if (transportationType === Transportation.OTHER) {
+          return (
+            <FormControl
+              isInvalid={
+                Boolean(formik.errors.homecomingVehicleAdditionalInfo) &&
+                formik.submitCount > 0
+              }
+            >
+              <FormLabel htmlFor='homecomingVehicleAdditionalInfo'>
+                Nama Kendaraan
+              </FormLabel>
+              <Input
+                id='homecomingVehicleAdditionalInfo'
+                variant={'primary'}
+                onChange={(e) =>
+                  handleChange(
+                    'homecomingVehicleAdditionalInfo',
+                    e.target.value
+                  )
+                }
+                value={formik.values.homecomingVehicleAdditionalInfo}
+              />
+              {Boolean(formik.errors.homecomingVehicleAdditionalInfo) &&
+              formik.submitCount > 0 ? (
+                <FormErrorMessage>
+                  {formik.errors.homecomingVehicleAdditionalInfo}
+                </FormErrorMessage>
+              ) : null}
+            </FormControl>
+          );
         } else return null;
 
       case 'departure':
@@ -239,6 +271,33 @@ function Registration() {
               formik.submitCount > 0 ? (
                 <FormErrorMessage>
                   {formik.errors.departureTrainName}
+                </FormErrorMessage>
+              ) : null}
+            </FormControl>
+          );
+        } else if (transportationType === Transportation.OTHER) {
+          return (
+            <FormControl
+              isInvalid={
+                Boolean(formik.errors.departureVehicleAdditionalInfo) &&
+                formik.submitCount > 0
+              }
+            >
+              <FormLabel htmlFor='departureVehicleAdditionalInfo'>
+                Nama Kendaraan
+              </FormLabel>
+              <Input
+                id='departureVehicleAdditionalInfo'
+                variant={'primary'}
+                onChange={(e) =>
+                  handleChange('departureVehicleAdditionalInfo', e.target.value)
+                }
+                value={formik.values.departureVehicleAdditionalInfo}
+              />
+              {Boolean(formik.errors.departureVehicleAdditionalInfo) &&
+              formik.submitCount > 0 ? (
+                <FormErrorMessage>
+                  {formik.errors.departureVehicleAdditionalInfo}
                 </FormErrorMessage>
               ) : null}
             </FormControl>

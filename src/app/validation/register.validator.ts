@@ -14,11 +14,13 @@ interface IRegisterInitialValue {
   departureFlightNumber: string;
   departureAirLine: string;
   departureTrainName: string;
+  departureVehicleAdditionalInfo: string;
   homecomingTrasportationType: string;
   homecomingTime: string;
   homecomingFlightNumber: string;
   homecomingAirLine: string;
   homecomingTrainName: string;
+  homecomingVehicleAdditionalInfo: string;
 }
 
 const registerValidatorSchema = Yup.object({
@@ -81,12 +83,14 @@ const registerInitialValues = (): IRegisterInitialValue => {
     departureAirLine: '',
     departureFlightNumber: '',
     departureTime: '',
+    departureVehicleAdditionalInfo: '',
     homecomingTrasportationType: '',
     homecomingAirLine: '',
     homecomingFlightNumber: '',
     homecomingTime: '',
     homecomingTrainName: '',
     departureTrainName: '',
+    homecomingVehicleAdditionalInfo: '',
   };
 };
 
